@@ -1,6 +1,6 @@
 [package]
 name = "wxf-converter"
-version = "0.1.0"
+version = "0.2.0"
 authors = ["Aster <192607617@qq.com>"]
 description = "Transform yaml, json, pkl files to wolfram"
 repository = "https://github.com/GalAster/wolfram-exchange"
@@ -16,7 +16,7 @@ path = "src/main.rs"
 clap="2.27"
 
 [dependencies.wolfram_wxf]
-version = "0.2"
+version = "0.2.2"
 default-features = false
 features = ["json", "pickle", "yaml"]
 

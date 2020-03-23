@@ -6,16 +6,20 @@ pub mod utils;
 use crate::utils::{parse_file, write_to_file};
 use clap::{App, Arg};
 
+#[derive(Debug)]
 pub enum SupportedFormat {
-    Json,
-    Toml,
-    Yaml,
+    JSON,
+    TOML,
+    YAML,
     Pickle,
 }
 
 #[derive(Debug)]
 pub enum Error {
-    IO
+    FileNotFound,
+    PermissionDenied,
+    UnknownIOError,
+    ParseFailed,
 }
 
 fn main() -> Result<(), Error> {
@@ -54,6 +58,7 @@ fn main() -> Result<(), Error> {
             .takes_value(true))
         .get_matches();
     let input = matches.value_of("INPUT").unwrap();
+
     let value = parse_file(input)?;
     match matches.occurrences_of("Text") {
         0 => (),
