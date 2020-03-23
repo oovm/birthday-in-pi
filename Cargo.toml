@@ -1,0 +1,26 @@
+[package]
+name = "wxf-converter"
+version = "0.0.0"
+authors = ["Aster <192607617@qq.com>"]
+description = "..."
+repository = "https://github.com/GalAster/wolfram-exchange"
+readme = "Readme.md"
+license = "MPL-2.0"
+edition = "2018"
+
+[[bin]]
+name = "wex"
+path = "src/main.rs"
+
+[dependencies]
+clap="2.27"
+
+[dependencies.wolfram_wxf]
+version = "0.2"
+default-features = false
+features = ["json", "pickle", "yaml"]
+
+[profile.release]
+opt-level = 'z'
+lto = true
+panic = 'abort'
