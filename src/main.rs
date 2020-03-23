@@ -1,3 +1,4 @@
+#![feature(try_trait)]
 extern crate clap;
 extern crate wolfram_wxf;
 
@@ -16,6 +17,7 @@ pub enum SupportedFormat {
 
 #[derive(Debug)]
 pub enum Error {
+    NullException,
     FileNotFound,
     PermissionDenied,
     UnknownIOError,
@@ -59,7 +61,7 @@ fn main() -> Result<(), Error> {
         .get_matches();
     let input = matches.value_of("INPUT").unwrap();
 
-    let value = parse_file(input)?;
+    let value = parse_file(input, matches.value_of("File Format"))?;
     match matches.occurrences_of("Text") {
         0 => (),
         _ => write_to_file(&format!("{}.m", input), value.to_string().as_bytes())?,

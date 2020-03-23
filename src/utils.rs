@@ -1,6 +1,4 @@
-use crate::{
-    Error, SupportedFormat,
-};
+use crate::{Error, SupportedFormat};
 use std::{
     fs,
     fs::File,
@@ -8,24 +6,23 @@ use std::{
 };
 use wolfram_wxf::{utils::parse_yaml, WolframValue};
 
-pub fn parse_file(path: &str) -> Result<WolframValue, Error> {
+pub fn parse_file(path: &str, format: Option<&str>) -> Result<WolframValue, Error> {
     let s = fs::read_to_string(path)?;
-    let f = parse_format(path);
-    println!("Parsing the file {} as {:?}", path, f);
-    match parse_format(path) {
+    let suffix = match format {
+        Some(s) => s,
+        None => path.split('/').last()?.split('.').last()?,
+    };
+    let format = match suffix {
+        "yml" | "yaml" => SupportedFormat::YAML,
+        "json" => SupportedFormat::JSON,
+        _ => SupportedFormat::TOML,
+    };
+    println!("Parsing the file {} as {:?}", path, format);
+    match format {
         SupportedFormat::JSON => unimplemented!(),
         SupportedFormat::TOML => unimplemented!(),
         SupportedFormat::YAML => parse_yaml(&s).map_err(|_| Error::ParseFailed),
         SupportedFormat::Pickle => unimplemented!(),
-    }
-}
-
-fn parse_format(input: &str) -> SupportedFormat {
-    let suffix: &str = input.split('/').last().unwrap().split('.').last().unwrap();
-    match suffix {
-        "yml" | "yaml" => SupportedFormat::YAML,
-        "json" => SupportedFormat::JSON,
-        _ => SupportedFormat::TOML,
     }
 }
 
@@ -43,5 +40,11 @@ impl From<std::io::Error> for Error {
             ErrorKind::PermissionDenied => Error::PermissionDenied,
             _ => Error::UnknownIOError,
         }
+    }
+}
+
+impl From<std::option::NoneError> for Error {
+    fn from(_: std::option::NoneError) -> Self {
+        Error::NullException
     }
 }

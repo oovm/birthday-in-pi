@@ -1,6 +1,6 @@
 [package]
 name = "wxf-converter"
-version = "0.2.0"
+version = "0.3.0"
 authors = ["Aster <192607617@qq.com>"]
 description = "Transform yaml, json, pkl files to wolfram"
 repository = "https://github.com/GalAster/wolfram-exchange"
