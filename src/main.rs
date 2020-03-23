@@ -21,12 +21,12 @@ pub enum Error {
 fn main() -> Result<(), Error> {
     #[rustfmt::skip]
         let matches = App::new("Wolfram Format Converter")
-        .version("0.1.0")
-        .author("Aster <192607617@qq.com>")
-        .about("Transform yaml, json, pkl files to wolfram")
+        .version(env!("CARGO_PKG_VERSION"))
+        .author(env!("CARGO_PKG_AUTHORS"))
+        .about(env!("CARGO_PKG_DESCRIPTION"))
         .arg(Arg::with_name("INPUT")
             .help("Sets the input file to use")
-            .required(true)
+        .required(true)
             .index(1))
         .arg(Arg::with_name("Text")
             .short("t")
