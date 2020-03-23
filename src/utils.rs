@@ -4,7 +4,10 @@ use std::{
     fs::File,
     io::{ErrorKind, Write},
 };
-use wolfram_wxf::{utils::parse_yaml, WolframValue};
+use wolfram_wxf::{
+    utils::{parse_json, parse_toml, parse_yaml},
+    WolframValue,
+};
 
 pub fn parse_file(path: &str, format: Option<&str>) -> Result<WolframValue, Error> {
     let s = fs::read_to_string(path)?;
@@ -12,15 +15,15 @@ pub fn parse_file(path: &str, format: Option<&str>) -> Result<WolframValue, Erro
         Some(s) => s,
         None => path.split('/').last()?.split('.').last()?,
     };
-    let format = match suffix {
+    let format = match suffix.to_lowercase().as_str() {
         "yml" | "yaml" => SupportedFormat::YAML,
         "json" => SupportedFormat::JSON,
         _ => SupportedFormat::TOML,
     };
     println!("Parsing the file {} as {:?}", path, format);
     match format {
-        SupportedFormat::JSON => unimplemented!(),
-        SupportedFormat::TOML => unimplemented!(),
+        SupportedFormat::JSON => parse_json(&s).map_err(|_| Error::ParseFailed),
+        SupportedFormat::TOML => parse_toml(&s).map_err(|_| Error::ParseFailed),
         SupportedFormat::YAML => parse_yaml(&s).map_err(|_| Error::ParseFailed),
         SupportedFormat::Pickle => unimplemented!(),
     }

@@ -60,4 +60,4 @@ ARGS:
 
 If you have any questions or suggestions, post them on:
 
-https://github.com/GalAster/wolfram-exchange
+https://github.com/GalAster/wolfram-exchange/issues
